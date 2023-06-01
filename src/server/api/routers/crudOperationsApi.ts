@@ -79,6 +79,7 @@ export const crudOperationsRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ()=>{
     try{
       const getAllData=await prisma.notes.findMany()
+      console.log("get All crud operations ",getAllData)
       return getAllData
     }catch(error){
       console.log("error while fetching all notes " + error);
