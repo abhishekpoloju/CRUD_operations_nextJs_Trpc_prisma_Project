@@ -2,6 +2,7 @@
 import { subscribeRouter } from "~/server/api/routers/subScribe";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { crudOperationsRouter } from "./routers/crudOperationsApi";
+// import { exampleRouter } from "./routers/example";
 
 /**
  * This is the primary router for your server.
@@ -10,7 +11,8 @@ import { crudOperationsRouter } from "./routers/crudOperationsApi";
  */
 export const appRouter = createTRPCRouter({
   subscribe: subscribeRouter,
-  crudApi:crudOperationsRouter
+  crudApi:crudOperationsRouter,
+  // example:exampleRouter
 });
 
 // export type definition of API
