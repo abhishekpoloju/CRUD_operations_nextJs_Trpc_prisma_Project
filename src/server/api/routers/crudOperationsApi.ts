@@ -5,14 +5,14 @@ export const crudOperationsRouter = createTRPCRouter({
   add: publicProcedure
     .input(
       z.object({
-        title: z.string().min(5, "requried min 5 length"),
+        title: z.string(),
         description: z.string().max(300, "cant be more than 200 words"),
       })
     )
     .mutation(async ({ input }) => {
       try {
         const postData = await prisma.notes.create({
-          data: { title: input.title, description: input.description },
+          data: { title: input?.title, description: input.description },
         });
         return postData;
       } catch (error) {

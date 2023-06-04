@@ -8,10 +8,10 @@ export default async function handler(
 ) {
   const {data,error}= api.crudApi.getAll.useQuery()  
   if (error) {
-    console.log(error)
+    console.log("error in getData.ts",error)
     res.status(500).json({ error: error.message });
   } else {
-    console.log(data)
+    console.log("data in getData.ts",data)
     res.status(200).json(data);
   }
 }
