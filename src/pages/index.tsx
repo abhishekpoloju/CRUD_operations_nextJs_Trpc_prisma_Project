@@ -13,20 +13,20 @@ const Home = () => {
   const [openAddModelToogle, setOpenAddModelToggle] = useState("");
   const [openAddModel, setOpenAddModel] = useState(false);
   const handleAddModel = (index: string) => {
-    console.log("handle Add model called ", index)
+    
     setOpenAddModelToggle(index);
     setOpenAddModel(true);
   };
   const [openViewModelToogle, setOpenViewModelToggle] = useState("");
   const [openViewModel, setOpenViewModel] = useState(false);
   const handleViewModel = (index: string) => {
-    console.log("handle view model called ",index)
+    
     setOpenViewModelToggle(index);
     setOpenViewModel(true);
   };
   if (data) {
     return (
-      <div className="w-full p-5 pt-10">
+      <div className={`w-full font-mono p-5 pt-10 ${openViewModel?'bg-opacity-50':'bg-opacity-100'}`}>
         <div className="flex w-full justify-center">
           <button
             onClick={() => {
