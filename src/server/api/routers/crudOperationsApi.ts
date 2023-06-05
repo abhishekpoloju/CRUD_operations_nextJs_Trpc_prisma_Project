@@ -16,7 +16,6 @@ export const crudOperationsRouter = createTRPCRouter({
         });
         return postData;
       } catch (error) {
-        console.log("error while creating note " + error);
         throw new Error("failed to create note " + error);
       }
     }),
@@ -31,7 +30,6 @@ export const crudOperationsRouter = createTRPCRouter({
         const deleting = await prisma.notes.delete({ where: { id: input.id } });
         return deleting;
       } catch (error) {
-        console.log("error while deleting note " + error);
         throw new Error("failed to delete note " + error);
       }
     }),
@@ -48,7 +46,6 @@ export const crudOperationsRouter = createTRPCRouter({
         });
         return getData;
       } catch (error) {
-        console.log("error while fetching note " + error);
         throw new Error("failed to fetch note " + error);
       }
     }),
@@ -72,17 +69,14 @@ export const crudOperationsRouter = createTRPCRouter({
         );
         return updateData
       } catch (error) {
-        console.log("error while fetching note " + error);
         throw new Error("failed to fetch note " + error);
       }
     }),
   getAll: publicProcedure.query(async ()=>{
     try{
       const getAllData=await prisma.notes.findMany()
-      console.log("get All crud operations ",getAllData)
       return getAllData
     }catch(error){
-      console.log("error while fetching all notes " + error);
       throw new Error("failed to fetch all notes" + error);
     }
   }),
