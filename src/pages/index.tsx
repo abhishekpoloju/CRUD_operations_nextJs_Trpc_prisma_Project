@@ -8,18 +8,7 @@ const Home = () => {
   const deleteMutation = api.crudApi.delete.useMutation();
   const [searchQuery, setSearchQuery] = useState("");
   const [retrieve, setRetrieve] = useState<Notes[]>();
-
-  const { data, error, refetch, isLoading } = api.crudApi.getAll.useQuery({
-    searchQuery: searchQuery,
-  });
-  console.log(data);
-  useEffect(() => {
-    setRetrieve(data);
-  }, [data]);
-  const handleDelete = async (id: string) => {
-    await deleteMutation.mutateAsync({ id });
-    refetch();
-  };
+  const [backgroundclick, setBackgroundClick]=useState<boolean>(true)
   const [openAddModelToogle, setOpenAddModelToggle] = useState("");
   const [openAddModel, setOpenAddModel] = useState(false);
   const handleAddModel = (index: string) => {
@@ -32,6 +21,18 @@ const Home = () => {
     setOpenViewModelToggle(index);
     setOpenViewModel(true);
   };
+  const { data, error, refetch, isLoading } = api.crudApi.getAll.useQuery({
+    searchQuery: searchQuery,
+  });
+  console.log(data);
+  useEffect(() => {
+    setRetrieve(data);
+  }, [data]);
+  const handleDelete = async (id: string) => {
+    await deleteMutation.mutateAsync({ id });
+    refetch();
+  };
+  
   if (isLoading) {
     return (
       <div className="fixed left-[60%] top-[50%] -translate-x-[50%] -translate-y-[50%] animate-pulse"></div>
