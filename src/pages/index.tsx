@@ -1,12 +1,18 @@
 import { Notes } from "@prisma/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import { AddModel } from "~/components/AddModel";
 import { ViewModel } from "~/components/ViewModel";
 import React from "react";
 const Home = () => {
   const deleteMutation = api.crudApi.delete.useMutation();
-  const { data, error, refetch } = api.crudApi.getAll.useQuery();
+  const [searchQuery,setSearchQuery]=useState("")
+  const [retrieve,setRetrieve]=useState<Notes[]>()
+  const { data, error, refetch } = api.crudApi.getAll.useQuery({searchQuery:searchQuery});
+  useEffect(()=>{
+    setRetrieve(data)
+  },[data])
+  useState
   const handleDelete = async (id: string) => {
     deleteMutation.mutateAsync({ id });
     await refetch();
@@ -25,10 +31,12 @@ const Home = () => {
     setOpenViewModelToggle(index);
     setOpenViewModel(true);
   };
-  if (data) {
+  if (retrieve) {
+    console.log(retrieve)
     return (
       <div className={`w-full font-mono p-5 pt-10 ${openViewModel?'bg-opacity-50':'bg-opacity-100'}`}>
         <div className="flex w-full justify-center">
+          <input type="text" value={searchQuery} onChange={(event)=>{setSearchQuery(event.target.value)}} className="w-[400px] border rounded"/>
           <button
             onClick={() => {
               handleAddModel("");
@@ -41,9 +49,9 @@ const Home = () => {
             <AddModel isUpdateFlag={false} id="" setCloseModel={setOpenAddModel}/>
           )}
         </div>
-        {data?.length && (
+        {retrieve?.length && (
           <div className="grid grid-cols-4 mt-10 gap-3 ">
-            {data.map((data: Notes) => {
+            {retrieve.map((data: Notes) => {
               return (
                 <React.Fragment
                   key={data.id}                  

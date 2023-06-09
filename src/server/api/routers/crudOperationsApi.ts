@@ -54,7 +54,7 @@ export const crudOperationsRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         title: z.string(),
-        description: z.string()
+        description: z.string(),
       })
     )
     .mutation(async ({ input }) => {
@@ -65,36 +65,31 @@ export const crudOperationsRouter = createTRPCRouter({
             title: input.title,
             description: input.description,
           },
-        }
-        );
-        return updateData
+        });
+        return updateData;
       } catch (error) {
         throw new Error("failed to fetch note " + error);
       }
     }),
-  getAll: publicProcedure.input(z.object({
-    searchQuery:z.string()
-  })).query(async ({input})=>{
-    try{
-      const queryOptions={where:{
-      }};
-      if(input.searchQuery.length){
-        queryOptions.where={
-          ...queryOptions.where,
-          OR:[
-            {
-              title:{
-                contains:input.searchQuery,
-                mode: "insensitive",
-              }
-            }
-          ]
-        }
+  getAll: publicProcedure
+    .input(
+      z.object({
+        searchQuery: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      try {
+        const queryOptions = {
+          where: {
+            title: {
+              contains: input.searchQuery,
+            },
+          },
+        };
+
+        return await prisma.notes.findMany(queryOptions);
+      } catch (error) {
+        throw new Error("failed to fetch all notes" + error);
       }
-      const getAllData=await prisma.notes.findMany(queryOptions)
-      return getAllData
-    }catch(error){
-      throw new Error("failed to fetch all notes" + error);
-    }
-  }),
+    }),
 });
