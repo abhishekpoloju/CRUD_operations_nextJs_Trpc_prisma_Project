@@ -14,7 +14,8 @@ const updateMutation=api.crudApi.update.useMutation()
   const [title,setTitle]=useState(props.title||"")
   const [description,setDescription]=useState(props.description||"");
   
-  const handleSubmit=()=>{
+  const handleSubmit=(e:any)=>{
+    e.preventDefault();
     if(props.isUpdateFlag){
       updateMutation.mutateAsync({id:props.id,title,description})
     }else{

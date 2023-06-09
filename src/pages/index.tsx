@@ -6,37 +6,49 @@ import { ViewModel } from "~/components/ViewModel";
 import React from "react";
 const Home = () => {
   const deleteMutation = api.crudApi.delete.useMutation();
-  const [searchQuery,setSearchQuery]=useState("")
-  const [retrieve,setRetrieve]=useState<Notes[]>()
-  const { data, error, refetch } = api.crudApi.getAll.useQuery({searchQuery:searchQuery});
-  useEffect(()=>{
-    setRetrieve(data)
-  },[data])
-  useState
+  const [searchQuery, setSearchQuery] = useState("");
+  const [retrieve, setRetrieve] = useState<Notes[]>();
+
+  const { data, error, refetch } = api.crudApi.getAll.useQuery({
+    searchQuery: searchQuery,
+  });
+  console.log(data)
+  useEffect(() => {
+    setRetrieve(data);
+  }, [data]);
   const handleDelete = async (id: string) => {
-    deleteMutation.mutateAsync({ id });
-    await refetch();
+    await deleteMutation.mutateAsync({ id });
+    refetch();
   };
   const [openAddModelToogle, setOpenAddModelToggle] = useState("");
   const [openAddModel, setOpenAddModel] = useState(false);
   const handleAddModel = (index: string) => {
-    
     setOpenAddModelToggle(index);
     setOpenAddModel(true);
   };
   const [openViewModelToogle, setOpenViewModelToggle] = useState("");
   const [openViewModel, setOpenViewModel] = useState(false);
   const handleViewModel = (index: string) => {
-    
     setOpenViewModelToggle(index);
     setOpenViewModel(true);
   };
   if (retrieve) {
-    console.log(retrieve)
+    console.log(retrieve);
     return (
-      <div className={`w-full font-mono p-5 pt-10 ${openViewModel?'bg-opacity-50':'bg-opacity-100'}`}>
+      <div
+        className={`w-full p-5 pt-10 font-mono ${
+          openViewModel ? "bg-opacity-50" : "bg-opacity-100"
+        }`}
+      >
         <div className="flex w-full justify-center">
-          <input type="text" value={searchQuery} onChange={(event)=>{setSearchQuery(event.target.value)}} className="w-[400px] border rounded"/>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(event) => {
+              setSearchQuery(event.target.value);
+            }}
+            className="w-[400px] rounded border"
+          />
           <button
             onClick={() => {
               handleAddModel("");
@@ -46,22 +58,24 @@ const Home = () => {
             Add newNote
           </button>
           {openAddModel && openAddModelToogle === "" && (
-            <AddModel isUpdateFlag={false} id="" setCloseModel={setOpenAddModel}/>
+            <AddModel
+              isUpdateFlag={false}
+              id=""
+              setCloseModel={setOpenAddModel}
+            />
           )}
         </div>
         {retrieve?.length && (
-          <div className="grid grid-cols-4 mt-10 gap-3 ">
+          <div className="mt-10 grid grid-cols-4 gap-3 ">
             {retrieve.map((data: Notes) => {
               return (
-                <React.Fragment
-                  key={data.id}                  
-                >
+                <React.Fragment key={data.id}>
                   <div className="bg-pink-300">{data.title}</div>
                   <button
                     onClick={() => {
                       handleViewModel(data.id);
                     }}
-                    className="w-auto bg-slate-600 rounded p-2 text-white"
+                    className="w-auto rounded bg-slate-600 p-2 text-white"
                   >
                     view
                   </button>
@@ -69,12 +83,12 @@ const Home = () => {
                     onClick={() => {
                       handleAddModel(data.id);
                     }}
-                    className="bg-orange-300 rounded p-2 text-white"
+                    className="rounded bg-orange-300 p-2 text-white"
                   >
                     edit
                   </button>
                   <button
-                    className="bg-green-300 rounded p-2 text-white"
+                    className="rounded bg-green-300 p-2 text-white"
                     onClick={() => {
                       handleDelete(data.id);
                     }}
@@ -82,13 +96,23 @@ const Home = () => {
                     delete
                   </button>
                   {openAddModel && openAddModelToogle === data.id && (
-                    <AddModel isUpdateFlag id={data.id} title={data.title} description={data.description} setCloseModel={setOpenAddModel}/>
+                    <AddModel
+                      isUpdateFlag
+                      id={data.id}
+                      title={data.title}
+                      description={data.description}
+                      setCloseModel={setOpenAddModel}
+                    />
                   )}
-                  {
-                    openViewModel && openViewModelToogle===data.id &&(
-                      <ViewModel title={data.title} description={data.description} createdDate={data.createdAt.toLocaleDateString()} updatedDate={data.updatedAt.toLocaleDateString()} setCloseModel={setOpenViewModel}/>
-                    )
-                  }
+                  {openViewModel && openViewModelToogle === data.id && (
+                    <ViewModel
+                      title={data.title}
+                      description={data.description}
+                      createdDate={data.createdAt.toLocaleDateString()}
+                      updatedDate={data.updatedAt.toLocaleDateString()}
+                      setCloseModel={setOpenViewModel}
+                    />
+                  )}
                 </React.Fragment>
               );
             })}

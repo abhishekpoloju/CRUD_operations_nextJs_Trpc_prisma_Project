@@ -6,7 +6,7 @@ export const crudOperationsRouter = createTRPCRouter({
     .input(
       z.object({
         title: z.string(),
-        description: z.string().max(300, "cant be more than 200 words"),
+        description: z.string().max(300, "cant be more than 300 words"),
       })
     )
     .mutation(async ({ input }) => {
