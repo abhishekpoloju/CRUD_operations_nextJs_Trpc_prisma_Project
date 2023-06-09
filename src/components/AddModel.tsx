@@ -7,6 +7,7 @@ interface AddModelProps{
   id:string
   setCloseModel:Dispatch<SetStateAction<boolean>>
   refetch:any
+  setBackgroundClick:Dispatch<SetStateAction<boolean>>
 }
 
 export const AddModel=(props:AddModelProps)=> {
@@ -25,15 +26,17 @@ const updateMutation=api.crudApi.update.useMutation()
     })  
   }
   props.refetch()
+  props.setBackgroundClick(true)
   props.setCloseModel(false)
   }
   const handleReset=()=>{
     setTitle(props.title!)
     setDescription(props.description!)
     props.setCloseModel(false)
+    props.setBackgroundClick(true)
   }
   return (
-    <div className='w-[500px] absolute font-mono border border-slate-950 rounded md p-5 flex flex-col gap-5 bg-slate-100 z-50'>
+    <div className='pointer-events-auto w-[500px] absolute right-[2%] top-[2%] font-mono border border-slate-950 rounded md p-5 flex flex-col gap-5 bg-slate-100 z-50'>
       <form onSubmit={handleSubmit} onReset={handleReset} className='flex flex-col gap-3'>
       <textarea className='bg-white outline-none rounded-2xl px-4 pt-2' placeholder='Enter Title' value={title} onChange={(event)=>{setTitle(event.target.value);console.log(title)}} />
       <textarea className='bg-white  outline-none rounded-2xl px-4 pt-2' placeholder='Enter Description' value={description} onChange={(event)=>{setDescription(event.target.value);console.log(title)}}/>
