@@ -3,6 +3,7 @@ import { useState } from "react";
 import { api } from "~/utils/api";
 import { AddModel } from "~/components/AddModel";
 import { ViewModel } from "~/components/ViewModel";
+import React from "react";
 const Home = () => {
   const deleteMutation = api.crudApi.delete.useMutation();
   const { data, error, refetch } = api.crudApi.getAll.useQuery();
@@ -41,19 +42,18 @@ const Home = () => {
           )}
         </div>
         {data?.length && (
-          <div className=" grid-cols-1 mt-10 gap-10 border ">
+          <div className="grid grid-cols-4 mt-10 gap-3 ">
             {data.map((data: Notes) => {
               return (
-                <div
-                  key={data.id}
-                  className="grid w-auto grid-cols-4  border"
+                <React.Fragment
+                  key={data.id}                  
                 >
                   <div className="bg-pink-300">{data.title}</div>
                   <button
                     onClick={() => {
                       handleViewModel(data.id);
                     }}
-                    className="bg-slate-300 text-white"
+                    className="w-auto bg-slate-600 rounded p-2 text-white"
                   >
                     view
                   </button>
@@ -61,12 +61,12 @@ const Home = () => {
                     onClick={() => {
                       handleAddModel(data.id);
                     }}
-                    className="bg-orange-300 text-white"
+                    className="bg-orange-300 rounded p-2 text-white"
                   >
                     edit
                   </button>
                   <button
-                    className="bg-green-300 text-white"
+                    className="bg-green-300 rounded p-2 text-white"
                     onClick={() => {
                       handleDelete(data.id);
                     }}
@@ -81,7 +81,7 @@ const Home = () => {
                       <ViewModel title={data.title} description={data.description} createdDate={data.createdAt.toLocaleDateString()} updatedDate={data.updatedAt.toLocaleDateString()} setCloseModel={setOpenViewModel}/>
                     )
                   }
-                </div>
+                </React.Fragment>
               );
             })}
           </div>

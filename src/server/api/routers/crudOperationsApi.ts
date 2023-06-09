@@ -72,9 +72,26 @@ export const crudOperationsRouter = createTRPCRouter({
         throw new Error("failed to fetch note " + error);
       }
     }),
-  getAll: publicProcedure.query(async ()=>{
+  getAll: publicProcedure.input(z.object({
+    searchQuery:z.string()
+  })).query(async ({input})=>{
     try{
-      const getAllData=await prisma.notes.findMany()
+      const queryOptions={where:{
+      }};
+      if(input.searchQuery.length){
+        queryOptions.where={
+          ...queryOptions.where,
+          OR:[
+            {
+              title:{
+                contains:input.searchQuery,
+                mode: "insensitive",
+              }
+            }
+          ]
+        }
+      }
+      const getAllData=await prisma.notes.findMany(queryOptions)
       return getAllData
     }catch(error){
       throw new Error("failed to fetch all notes" + error);
