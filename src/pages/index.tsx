@@ -2,17 +2,17 @@ import { Notes } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import { AddModel } from "~/components/AddModel";
-import { ViewModel } from "~/components/ViewModel";
+import { Todo } from "~/components/Todo";
 import React from "react";
 const Home = () => {
   const deleteMutation = api.crudApi.delete.useMutation();
   const [searchQuery, setSearchQuery] = useState("");
   const [retrieve, setRetrieve] = useState<Notes[]>();
 
-  const { data, error, refetch } = api.crudApi.getAll.useQuery({
+  const { data, error, refetch, isLoading } = api.crudApi.getAll.useQuery({
     searchQuery: searchQuery,
   });
-  console.log(data)
+  console.log(data);
   useEffect(() => {
     setRetrieve(data);
   }, [data]);
@@ -32,6 +32,11 @@ const Home = () => {
     setOpenViewModelToggle(index);
     setOpenViewModel(true);
   };
+  if (isLoading) {
+    return (
+      <div className="fixed left-[60%] top-[50%] -translate-x-[50%] -translate-y-[50%] animate-pulse"></div>
+    );
+  }
   if (retrieve) {
     console.log(retrieve);
     return (
@@ -62,62 +67,25 @@ const Home = () => {
               isUpdateFlag={false}
               id=""
               setCloseModel={setOpenAddModel}
+              refetch={refetch}
             />
           )}
         </div>
-        {retrieve?.length && (
-          <div className="mt-10 grid grid-cols-4 gap-3 ">
-            {retrieve.map((data: Notes) => {
-              return (
-                <React.Fragment key={data.id}>
-                  <div className="bg-pink-300">{data.title}</div>
-                  <button
-                    onClick={() => {
-                      handleViewModel(data.id);
-                    }}
-                    className="w-auto rounded bg-slate-600 p-2 text-white"
-                  >
-                    view
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleAddModel(data.id);
-                    }}
-                    className="rounded bg-orange-300 p-2 text-white"
-                  >
-                    edit
-                  </button>
-                  <button
-                    className="rounded bg-green-300 p-2 text-white"
-                    onClick={() => {
-                      handleDelete(data.id);
-                    }}
-                  >
-                    delete
-                  </button>
-                  {openAddModel && openAddModelToogle === data.id && (
-                    <AddModel
-                      isUpdateFlag
-                      id={data.id}
-                      title={data.title}
-                      description={data.description}
-                      setCloseModel={setOpenAddModel}
-                    />
-                  )}
-                  {openViewModel && openViewModelToogle === data.id && (
-                    <ViewModel
-                      title={data.title}
-                      description={data.description}
-                      createdDate={data.createdAt.toLocaleDateString()}
-                      updatedDate={data.updatedAt.toLocaleDateString()}
-                      setCloseModel={setOpenViewModel}
-                    />
-                  )}
-                </React.Fragment>
-              );
-            })}
-          </div>
-        )}
+        <Todo 
+        retrieve={retrieve}
+        openAddModelToogle={openAddModelToogle}
+        openAddModel={openAddModel}
+        setOpenAddModel={setOpenAddModel}
+        setOpenAddModelToggle={setOpenAddModelToggle}
+        openViewModel={openViewModel}
+        openViewModelToogle={openViewModelToogle}
+        setOpenViewModel={setOpenViewModel}
+        setOpenViewModelToggle={setOpenViewModelToggle}
+        handleAddModel={handleAddModel}
+        handleViewModel={handleViewModel}
+        handleDelete={handleDelete}
+        refetch={refetch}
+        />
       </div>
     );
   } else if (error) {

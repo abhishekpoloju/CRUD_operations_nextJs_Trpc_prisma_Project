@@ -6,10 +6,11 @@ interface ViewModelProps{
   createdDate:string
   updatedDate:string
   setCloseModel:Dispatch<SetStateAction<boolean>>
+
 }
 export const ViewModel = (props:ViewModelProps) => {
   return (
-    <div className='w-[500px] font-mono border rounded-md p-5 flex flex-col gap-3 bg-slate-100 top-48 left-[20rem] fixed z-50'>
+    <div className='absolute w-[500px] font-mono border rounded-md p-5 flex flex-col gap-3 bg-slate-100 z-50'>
       <textarea disabled className='bg-white w-full h-auto' value={props.title}/>
       <textarea disabled className='bg-white w-full h-auto' value={props.description}/>
       <div className='flex justify-between'>

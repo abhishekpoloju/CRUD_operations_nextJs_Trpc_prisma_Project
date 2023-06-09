@@ -6,6 +6,7 @@ interface AddModelProps{
   isUpdateFlag:boolean
   id:string
   setCloseModel:Dispatch<SetStateAction<boolean>>
+  refetch:any
 }
 
 export const AddModel=(props:AddModelProps)=> {
@@ -14,15 +15,17 @@ const updateMutation=api.crudApi.update.useMutation()
   const [title,setTitle]=useState(props.title||"")
   const [description,setDescription]=useState(props.description||"");
   
-  const handleSubmit=(e:any)=>{
+  const handleSubmit=async (e:any)=>{
     e.preventDefault();
     if(props.isUpdateFlag){
-      updateMutation.mutateAsync({id:props.id,title,description})
+      await updateMutation.mutateAsync({id:props.id,title,description})
     }else{
-    addMutation.mutateAsync({title,
+    await addMutation.mutateAsync({title,
       description
-    }) 
+    })  
   }
+  props.refetch()
+  props.setCloseModel(false)
   }
   const handleReset=()=>{
     setTitle(props.title!)
@@ -30,7 +33,7 @@ const updateMutation=api.crudApi.update.useMutation()
     props.setCloseModel(false)
   }
   return (
-    <div className='w-[500px] font-mono border border-slate-950 rounded md p-5 flex flex-col gap-5 bg-slate-100 top-48 left-[20rem] fixed z-50'>
+    <div className='w-[500px] absolute font-mono border border-slate-950 rounded md p-5 flex flex-col gap-5 bg-slate-100 z-50'>
       <form onSubmit={handleSubmit} onReset={handleReset} className='flex flex-col gap-3'>
       <textarea className='bg-white outline-none rounded-2xl px-4 pt-2' placeholder='Enter Title' value={title} onChange={(event)=>{setTitle(event.target.value);console.log(title)}} />
       <textarea className='bg-white  outline-none rounded-2xl px-4 pt-2' placeholder='Enter Description' value={description} onChange={(event)=>{setDescription(event.target.value);console.log(title)}}/>
