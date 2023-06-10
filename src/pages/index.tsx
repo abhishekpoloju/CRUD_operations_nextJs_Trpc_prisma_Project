@@ -31,9 +31,15 @@ const Home = () => {
   useEffect(() => {
     setRetrieve(data);
   }, [data]);
-  const handleDelete = async (id: string) => {
-    await deleteMutation.mutateAsync({ id });
-    refetch();
+  const handleDelete = async (id: string,index:number) => {
+    try {
+      await deleteMutation.mutateAsync({ id });
+      const tempdata = data;
+      delete tempdata![index!];
+      setRetrieve(tempdata);
+    } catch (e) {
+      console.log("cannot delete the item", e);
+    }
   };
 
   if (isLoading) {
@@ -48,16 +54,18 @@ const Home = () => {
         }`}
       >
         <div className="flex w-full justify-center">
-          <div className="flex w-full justify-between items-center px-5">
-          <div className=" border-1 relative  border-gray">
-              <div className="absolute top-[50%] -translate-y-[50%] left-3"><FcSearch /></div>
+          <div className="flex w-full items-center justify-between px-5">
+            <div className=" border-1 border-gray  relative">
+              <div className="absolute left-3 top-[50%] -translate-y-[50%]">
+                <FcSearch />
+              </div>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(event) => {
                   setSearchQuery(event.target.value);
                 }}
-                className=" rounded-3xl h-8 w-52 pl-8 outline-none border border-blue-400"
+                className=" h-8 w-52 rounded-3xl border border-blue-400 pl-8 outline-none"
               />
             </div>
             <button
@@ -68,7 +76,7 @@ const Home = () => {
             >
               Add newNote
             </button>
-            
+
             {openAddModel && openAddModelToogle === "" && (
               <AddModel
                 isUpdateFlag={false}
@@ -76,6 +84,10 @@ const Home = () => {
                 setCloseModel={setOpenAddModel}
                 refetch={refetch}
                 setBackgroundClick={setBackgroundClick}
+                data={data}
+                setRetrieve={setRetrieve}
+                retrieve={retrieve}
+                index={null}
               />
             )}
           </div>
@@ -95,6 +107,8 @@ const Home = () => {
           handleDelete={handleDelete}
           refetch={refetch}
           setBackgroundClick={setBackgroundClick}
+          data={data}
+          setRetrieve={setRetrieve}
         />
       </div>
     );

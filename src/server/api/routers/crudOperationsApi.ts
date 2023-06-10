@@ -11,10 +11,9 @@ export const crudOperationsRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       try {
-        const postData = await prisma.notes.create({
+        return await prisma.notes.create({
           data: { title: input?.title, description: input.description },
         });
-        return postData;
       } catch (error) {
         throw new Error("failed to create note " + error);
       }
