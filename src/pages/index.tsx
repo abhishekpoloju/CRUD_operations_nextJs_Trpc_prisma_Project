@@ -27,7 +27,6 @@ const Home = () => {
   const { data, error, refetch, isLoading } = api.crudApi.getAll.useQuery({
     searchQuery: searchQuery,
   });
-  console.log(data);
   useEffect(() => {
     setRetrieve(data);
   }, [data]);
@@ -46,7 +45,6 @@ const Home = () => {
     return <div className=" h-screen w-screen animate-pulse bg-black"></div>;
   }
   if (retrieve) {
-    console.log(retrieve);
     return (
       <div
         className={`w-full p-5 pt-10 font-mono ${

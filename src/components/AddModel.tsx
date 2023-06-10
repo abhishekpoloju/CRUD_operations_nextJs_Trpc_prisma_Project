@@ -34,7 +34,7 @@ export const AddModel = (props: AddModelProps) => {
       props.setRetrieve(tempdata)
     } else {
       const data = await addMutation.mutateAsync({ title, description });
-      console.log("data is .....", data);
+     
       props.setRetrieve([...(props.retrieve||[]),data])
     }
 
@@ -60,7 +60,6 @@ export const AddModel = (props: AddModelProps) => {
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);
-            console.log(title);
           }}
         />
         <textarea
@@ -69,7 +68,6 @@ export const AddModel = (props: AddModelProps) => {
           value={description}
           onChange={(event) => {
             setDescription(event.target.value);
-            console.log(title);
           }}
         />
         <div className="flex justify-end py-2">
