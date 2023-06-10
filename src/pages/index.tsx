@@ -44,30 +44,31 @@ const Home = () => {
     return (
       <div
         className={`w-full p-5 pt-10 font-mono ${
-          !backgroundclick ? "pointer-events-none h-screen" : ""
+          !backgroundclick ? "pointer-events-none h-screen bg-slate-400" : ""
         }`}
       >
         <div className="flex w-full justify-center">
-          <div className="flex w-full justify-between px-5">
-            <div className="relative">
-              <FcSearch className="absolute top-[50%] -translate-y-[50%]" />
+          <div className="flex w-full justify-between items-center px-5">
+          <div className=" border-1 relative  border-gray">
+              <div className="absolute top-[50%] -translate-y-[50%] left-3"><FcSearch /></div>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(event) => {
                   setSearchQuery(event.target.value);
                 }}
-                className=" rounded border"
+                className=" rounded-3xl h-8 w-52 pl-8 outline-none border border-blue-400"
               />
             </div>
             <button
               onClick={() => {
                 handleAddModel("");
               }}
-              className="rounded-lg bg-red-400 p-4 text-white"
+              className="rounded-3xl bg-red-400 p-4 text-white"
             >
               Add newNote
             </button>
+            
             {openAddModel && openAddModelToogle === "" && (
               <AddModel
                 isUpdateFlag={false}

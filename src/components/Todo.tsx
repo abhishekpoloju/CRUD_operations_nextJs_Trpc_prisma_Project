@@ -26,7 +26,7 @@ export const Todo = (props:TodoProps) => {
             {props.retrieve.map((data: Notes) => {
               return (
                 <React.Fragment key={data.id}>
-                  <div className="bg-pink-300">{data.title}</div>
+                  <div className="bg-pink-300 w-fit">{data.title}</div>
                   <div className='relative'>
                   <button
                     onClick={() => {
